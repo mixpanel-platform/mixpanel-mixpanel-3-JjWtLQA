@@ -9,7 +9,7 @@
     <div class='events'></div>
     <script>
       MP.api.ready(function(data) {
-        $.get('/data.json', function(resp) {
+        $.get('data.json', function(resp) {
             console.log(resp);
         }, 'json');
       });
