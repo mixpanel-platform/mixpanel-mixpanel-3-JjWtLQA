@@ -4,16 +4,43 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/css/reset.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.css">
     <script src="https://cdn.mxpnl.com/libs/mixpanel-platform/build/mixpanel-platform.v0.latest.min.js"></script>
-    <script src="test.js"></script>
   </head>
   <body class="mixpanel-platform-body">
-    <div class='events'></div>
+    <div class="mixpanel-platform-section">
+      <div id="eventSelect" style="float: left;"></div>
+      <div id="by" class="mixpanel-platform-label" style="margin-left: 10px; display: none;">by</div>
+      <div id="propSelect" style="float: left;"></div>
+      <div id="dateSelect" style="float: right;"></div>
+      <div style="clear: both;"></div>
+      <div id="graph"></div>
+    </div>
+    <div id="table"></div>
     <script>
-      MP.api.ready(function(data) {
-        $.get('data.json', function(resp) {
-            console.log(resp);
-        }, 'json');
-      });
+      MP.api.ready(function() {
+             // assumes you have an event called 'Button clicked'
+        var eventName = 'Viewed report';
+        var $mau = MP.api.segment(eventName, null, {
+            from: moment().subtract(1, 'months'),
+            to: moment(),
+            type: 'unique',
+            unit: 'month'
+        });
+    
+        var $dau = MP.api.segment(eventName, null, {
+            from: moment().subtract(1, 'days'),
+            to: moment(),
+            type: 'unique',
+            unit: 'day'
+        });
+    
+        $.when($dau, $mau).done(function(dau, mau) {
+          debugger;
+            $('<div></div>').appendTo('body').MPChart({
+                chartType: 'line',
+                data: mau.divide(dau.avg())
+            });
+        });
+});
     </script>
   </body>
 </html>
