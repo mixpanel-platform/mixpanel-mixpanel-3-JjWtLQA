@@ -8,6 +8,7 @@
   <body class="mixpanel-platform-body">
     <div class="mixpanel-platform-section">
       Quarterly unique users over the past three years (Chrome only, excluding 'flurry' and 'China')
+      <br/>
       $signups exclude all of that and invited users
     </div>
     <script>
@@ -20,6 +21,14 @@
             type: 'unique',
             interval: 90,
             where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["mp_country_code"]) != "CN")'
+        });
+        
+        var homepage_safari = MP.api.segment('homepage new - safari', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["$browser"]) == "Safari") and (string(properties["mp_country_code"]) != "CN")'
         });
         
         var signups = MP.api.segment('$signup', null, {
@@ -46,25 +55,23 @@
             interval: 90
         });
         
-        
-        
-        
-        $.when(homepage, signups, paid, first_payment).done(function(homepage, signups, paid, first_payment) { 
-          $chart.MPChart({
-                chartType: 'line'
+        $.when(homepage, homepage_safari, signups, paid, first_payment).done(
+            function(homepage, homepage_safari, signups, paid, first_payment) { 
+              $chart.MPChart({
+                    chartType: 'line'
+                });
+                
+                var myFilter = function(val) {
+                  return val > 0;
+                };
+                
+                $chart.MPChart('addSeries', homepage.filter(myFilter));
+                $chart.MPChart('addSeries', homepage_safari.filter(myFilter));
+                $chart.MPChart('addSeries', signups.filter(myFilter));
+                $chart.MPChart('addSeries', paid.filter(myFilter));
+                $chart.MPChart('addSeries', first_payment.filter(myFilter));
             });
-            
-            var myFilter = function(val) {
-              return val > 0;
-            };
-            
-            $chart.MPChart('addSeries', homepage.filter(myFilter));
-            $chart.MPChart('addSeries', signups.filter(myFilter));
-            $chart.MPChart('addSeries', paid.filter(myFilter));
-            $chart.MPChart('addSeries', first_payment.filter(myFilter));
-        })
-            
-});
+        });
     </script>
   </body>
 </html>
