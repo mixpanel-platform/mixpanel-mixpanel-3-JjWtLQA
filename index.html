@@ -7,29 +7,39 @@
   </head>
   <body class="mixpanel-platform-body">
     <div class="mixpanel-platform-section">
-      <div id="eventSelect" style="float: left;"></div>
-      <div id="by" class="mixpanel-platform-label" style="margin-left: 10px; display: none;">by</div>
-      <div id="propSelect" style="float: left;"></div>
-      <div id="dateSelect" style="float: right;"></div>
-      <div style="clear: both;"></div>
-      <div id="graph"></div>
+      Unique users in 90 day intervals over the past two years
     </div>
-    <div id="table"></div>
     <script>
       MP.api.ready(function() {
-             // assumes you have an event called 'Button clicked'
-        var eventName = '$custom_event:74987';
-        MP.api.segment(eventName, null, {
-            from: moment().subtract(60, 'months'),
+        // assumes you have an event called 'Button clicked'
+        var $chart = $('<div></div>').appendTo('body');
+        var homepage = MP.api.segment('homepage new', null, {
+            from: moment().subtract(36, 'months'),
             to: moment(),
             type: 'unique',
-            unit: 'month',
-            where: 'not "flurry" in string(properties["origin"]) and not "Safari" in properties["$browser"]'
-        }).done(function(data) { 
-          $('<div></div>').appendTo('body').MPChart({
-                chartType: 'line',
-                data: data
+            interval: 90,
+            where: '(string(properties["$browser"]) == "Chrome") and not "flurry" in string(user["Origin"])'
+        });
+        
+        var signups = MP.api.segment('$signup', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: '(string(properties["$browser"]) == "Chrome") and not "flurry" in string(user["Origin"])'
+        });
+        
+        $.when(homepage, signups).done(function(homepage, signups) { 
+          $chart.MPChart({
+                chartType: 'line'
             });
+            
+            var myFilter = function(val) {
+              return val > 0;
+            };
+            
+            $chart.MPChart('addSeries', homepage.filter(myFilter));
+            $chart.MPChart('addSeries', signups.filter(myFilter));
         })
             
 });
