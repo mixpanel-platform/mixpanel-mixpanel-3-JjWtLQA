@@ -18,28 +18,20 @@
     <script>
       MP.api.ready(function() {
              // assumes you have an event called 'Button clicked'
-        var eventName = 'Viewed report';
-        var $mau = MP.api.segment(eventName, null, {
-            from: moment().subtract(1, 'months'),
+        var eventName = '$custom_event:74987';
+        MP.api.segment(eventName, null, {
+            from: moment().subtract(60, 'months'),
             to: moment(),
             type: 'unique',
-            unit: 'month'
-        });
-    
-        var $dau = MP.api.segment(eventName, null, {
-            from: moment().subtract(1, 'days'),
-            to: moment(),
-            type: 'unique',
-            unit: 'day'
-        });
-    
-        $.when($dau, $mau).done(function(dau, mau) {
-          debugger;
-            $('<div></div>').appendTo('body').MPChart({
+            unit: 'month',
+            where: 'not "flurry" in string(properties["origin"])'
+        }).done(function(data) { 
+          $('<div></div>').appendTo('body').MPChart({
                 chartType: 'line',
-                data: mau.divide(dau.avg())
+                data: data
             });
-        });
+        })
+            
 });
     </script>
   </body>
