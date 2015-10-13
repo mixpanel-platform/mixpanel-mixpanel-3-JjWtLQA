@@ -38,9 +38,17 @@
         });
         
         
+        var first_payment = MP.api.segment('$custom_event:56005', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90
+        });
         
         
-        $.when(homepage, signups, paid).done(function(homepage, signups, paid) { 
+        
+        
+        $.when(homepage, signups, paid).done(function(homepage, signups, paid, first_payment) { 
           $chart.MPChart({
                 chartType: 'line'
             });
@@ -52,6 +60,7 @@
             $chart.MPChart('addSeries', homepage.filter(myFilter));
             $chart.MPChart('addSeries', signups.filter(myFilter));
             $chart.MPChart('addSeries', paid.filter(myFilter));
+            $chart.MPChart('addSeries', first_payment.filter(myFilter));
         })
             
 });
