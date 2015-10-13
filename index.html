@@ -23,14 +23,6 @@
             where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["mp_country_code"]) != "CN")'
         });
         
-        var homepage_safari = MP.api.segment('homepage new - safari', null, {
-            from: moment().subtract(36, 'months'),
-            to: moment(),
-            type: 'unique',
-            interval: 90,
-            where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["$browser"]) == "Safari") and (string(properties["mp_country_code"]) != "CN")'
-        });
-        
         var signups = MP.api.segment('$signup', null, {
             from: moment().subtract(36, 'months'),
             to: moment(),
@@ -55,8 +47,8 @@
             interval: 90
         });
         
-        $.when(homepage, homepage_safari, signups, paid, first_payment).done(
-            function(homepage, homepage_safari, signups, paid, first_payment) { 
+        $.when(homepage, signups, paid, first_payment).done(
+            function(homepage, signups, paid, first_payment) { 
               $chart.MPChart({
                     chartType: 'line'
                 });
@@ -66,7 +58,6 @@
                 };
                 
                 $chart.MPChart('addSeries', homepage.filter(myFilter));
-                $chart.MPChart('addSeries', homepage_safari.filter(myFilter));
                 $chart.MPChart('addSeries', signups.filter(myFilter));
                 $chart.MPChart('addSeries', paid.filter(myFilter));
                 $chart.MPChart('addSeries', first_payment.filter(myFilter));
