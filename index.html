@@ -24,7 +24,7 @@
             to: moment(),
             type: 'unique',
             unit: 'month',
-            where: 'not "flurry" in string(properties["origin"])'
+            where: 'not "flurry" in string(properties["origin"]) and not "Safari" in properties["$browser"]'
         }).done(function(data) { 
           $('<div></div>').appendTo('body').MPChart({
                 chartType: 'line',
