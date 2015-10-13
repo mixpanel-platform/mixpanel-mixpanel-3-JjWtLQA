@@ -29,7 +29,18 @@
             where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["mp_country_code"]) != "CN")'
         });
         
-        $.when(homepage, signups).done(function(homepage, signups) { 
+        var paid = MP.api.segment('Viewed report', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: 'boolean(user["is paid"]) == true'
+        });
+        
+        
+        
+        
+        $.when(homepage, signups, paid).done(function(homepage, signups, paid) { 
           $chart.MPChart({
                 chartType: 'line'
             });
@@ -40,6 +51,7 @@
             
             $chart.MPChart('addSeries', homepage.filter(myFilter));
             $chart.MPChart('addSeries', signups.filter(myFilter));
+            $chart.MPChart('addSeries', paid.filter(myFilter));
         })
             
 });
