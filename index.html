@@ -8,6 +8,7 @@
   <body class="mixpanel-platform-body">
     <div class="mixpanel-platform-section">
       Quarterly unique users over the past three years (Chrome only, excluding 'flurry' and 'China')
+      $signups exclude all of that and invited users
     </div>
     <script>
       MP.api.ready(function() {
@@ -26,7 +27,7 @@
             to: moment(),
             type: 'unique',
             interval: 90,
-            where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["mp_country_code"]) != "CN")'
+            where: 'not "flurry" in string(properties["origin"]) and (string(properties["$browser"]) == "Chrome") and (string(properties["mp_country_code"]) != "CN") and (string(properties["origin"]) != "invite")'
         });
         
         var paid = MP.api.segment('Viewed report', null, {
