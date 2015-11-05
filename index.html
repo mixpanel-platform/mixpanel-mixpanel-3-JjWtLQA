@@ -111,7 +111,7 @@
      interval:90,
      length:10,
     };
-    var pricing_to_payment = MP.api.funnel('View pricing page', 'First payment', params)
+    var pricing_to_payment = MP.api.funnel('View pricing page', '$custom_event:56005', params)
     var pricing_to_badge = MP.api.funnel('View pricing page', 'badge added', params)
     $.when(pricing_to_payment, pricing_to_badge).done(
              function(pricing_to_payment, pricing_to_badge) { 
