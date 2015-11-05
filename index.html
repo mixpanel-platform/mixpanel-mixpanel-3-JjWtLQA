@@ -12,7 +12,7 @@
       $signups exclude all of that and invited users
     </div>
     <script>
-    def build_conversion(data){
+    function build_conversion(data){
       var conversions = {}
       for (date in data){
         conversions[date] = data[date]["step_conv_ratio"]
