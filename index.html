@@ -12,6 +12,13 @@
       $signups exclude all of that and invited users
     </div>
     <script>
+    def build_conversion(data){
+      var conversions = {}
+      for (date in data){
+        conversions[date] = data[date]["step_conv_ratio"]
+      }
+      return conversions
+    }
       MP.api.ready(function() {
         // assumes you have an event called 'Button clicked'
         var $chart = $('<div></div>').appendTo('body');
@@ -105,13 +112,15 @@
      length:10,
     };
     var pricing_to_payment = MP.api.funnel('View pricing page', 'First payment', params)
+    var pricing_to_badge = MP.api.funnel('View pricing page', 'badge added', params)
     $.when(pricing_to_payment).done(
              function(pricing_to_payment) { 
                 
-                 var conversions = {}
-                 for (date in pricing_to_payment[1]){
-                    conversions[date] = pricing_to_payment[1][date]["step_conv_ratio"]
-                 }
+                conversions = build_conversion(pricing_to_payment[1])
+                // var conversions = {}
+                // for (date in pricing_to_payment[1]){
+                //     conversions[date] = pricing_to_payment[1][date]["step_conv_ratio"]
+                // }
                  var data = {}
                  data["pricing page to payment"] = conversions
                  var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
