@@ -39,7 +39,6 @@
             where: 'boolean(user["is paid"]) == true'
         });
         
-        
         var first_payment = MP.api.segment('$custom_event:56005', null, {
             from: moment().subtract(36, 'months'),
             to: moment(),
@@ -47,8 +46,38 @@
             interval: 90
         });
         
-        $.when(homepage, signups, paid, first_payment).done(
-            function(homepage, signups, paid, first_payment) { 
+        var warned = MP.api.segment('personal warned email sent', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90
+        });
+        
+        
+        var blocked = MP.api.segment('personal blocked email sent', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90
+        });
+        
+        var viewed_pricing_page = MP.api.segment('View pricing page', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: 'boolean(properties["user_id"]) == true'
+        });
+        
+        var badge_added = MP.api.segment('badge added', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90
+        });
+        
+        $.when(homepage, signups, paid, first_payment, viewed_pricing_page, badge_added, warned, blocked).done(
+            function(homepage, signups, paid, first_payment, viewed_pricing_page, badge_added, warned, blocked) { 
               $chart.MPChart({
                     chartType: 'line'
                 });
@@ -59,7 +88,13 @@
                 
                 $chart.MPChart('addSeries', homepage.filter(myFilter));
                 $chart.MPChart('addSeries', signups.filter(myFilter));
-                $chart.MPChart('addSeries', paid.filter(myFilter));
+                
+                // $chart.MPChart('addSeries', warned.filter(myFilter));
+                $chart.MPChart('addSeries', blocked.filter(myFilter));
+                $chart.MPChart('addSeries', viewed_pricing_page.filter(myFilter));
+                
+                $chart.MPChart('addSeries', badge_added.filter(myFilter));
+                // $chart.MPChart('addSeries', paid.filter(myFilter));
                 $chart.MPChart('addSeries', first_payment.filter(myFilter));
             });
         });
