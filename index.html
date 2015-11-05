@@ -76,28 +76,27 @@
             interval: 90
         });
         
-        $.when(homepage, signups, paid, first_payment, viewed_pricing_page, badge_added, warned, blocked).done(
-            function(homepage, signups, paid, first_payment, viewed_pricing_page, badge_added, warned, blocked) { 
-              $chart.MPChart({
-                    chartType: 'line'
-                });
-                
-                var myFilter = function(val) {
-                  return val > 0;
-                };
-                
-                $chart.MPChart('addSeries', homepage.filter(myFilter));
-                $chart.MPChart('addSeries', signups.filter(myFilter));
-                
-                // $chart.MPChart('addSeries', warned.filter(myFilter));
-                $chart.MPChart('addSeries', blocked.filter(myFilter));
-                $chart.MPChart('addSeries', viewed_pricing_page.filter(myFilter));
-                
-                $chart.MPChart('addSeries', badge_added.filter(myFilter));
-                // $chart.MPChart('addSeries', paid.filter(myFilter));
-                $chart.MPChart('addSeries', first_payment.filter(myFilter));
-            });
-        });
+      $.when(pricing_to_payment).done(
+           function(pricing_to_payment) { 
+             // $chart.MPChart({
+             //       chartType: 'line'
+             //   });
+               
+               var myFilter = function(val) {
+                 return val > 0;
+               };
+               console.log(pricing_to_payment)
+               // $chart.MPChart('addSeries', homepage.filter(myFilter));
+               // $chart.MPChart('addSeries', signups.filter(myFilter));
+               
+               // // $chart.MPChart('addSeries', warned.filter(myFilter));
+               // $chart.MPChart('addSeries', blocked.filter(myFilter));
+               // $chart.MPChart('addSeries', viewed_pricing_page.filter(myFilter));
+               
+               // $chart.MPChart('addSeries', badge_added.filter(myFilter));
+               // // $chart.MPChart('addSeries', paid.filter(myFilter));
+               // $chart.MPChart('addSeries', first_payment.filter(myFilter));
+           });
     </script>
   </body>
 </html>
