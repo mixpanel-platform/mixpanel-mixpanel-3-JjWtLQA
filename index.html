@@ -113,16 +113,15 @@
     };
     var pricing_to_payment = MP.api.funnel('View pricing page', 'First payment', params)
     var pricing_to_badge = MP.api.funnel('View pricing page', 'badge added', params)
-    $.when(pricing_to_payment).done(
-             function(pricing_to_payment) { 
+    $.when(pricing_to_payment, pricing_to_badge).done(
+             function(pricing_to_payment, pricing_to_badge) { 
                 
-                conversions = build_conversion(pricing_to_payment[1])
-                // var conversions = {}
-                // for (date in pricing_to_payment[1]){
-                //     conversions[date] = pricing_to_payment[1][date]["step_conv_ratio"]
-                // }
+                payment_conversion = build_conversion(pricing_to_payment[1])
+                badge_conversion = build_conversion(pricing_to_badge[1])
+
                  var data = {}
-                 data["pricing page to payment"] = conversions
+                 data["pricing page to payment"] = payment_conversion
+                 data["pricing page to badge added"] = badge_conversion
                  var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
                      tooltip: {
                          backgroundColor: '#fffce7'  // Make tooltip background yellow
