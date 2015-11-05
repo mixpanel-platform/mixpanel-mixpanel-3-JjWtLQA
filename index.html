@@ -98,6 +98,29 @@
                 $chart.MPChart('addSeries', first_payment.filter(myFilter));
            });
       });
+    var params = {
+     from: moment().subtract(36, 'months'),
+     to: moment(),
+     interval:90,
+     length:10,
+    };
+    var pricing_to_payment = MP.api.funnel('View pricing page', 'First payment', params)
+    $.when(pricing_to_payment).done(
+             function(pricing_to_payment) { 
+                
+                 var conversions = {}
+                 for (date in pricing_to_payment[1]){
+                    conversions[date] = pricing_to_payment[1][date]["step_conv_ratio"]
+                 }
+                 var data = {}
+                 data["pricing page to payment"] = conversions
+                 var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
+                     tooltip: {
+                         backgroundColor: '#fffce7'  // Make tooltip background yellow
+                     }
+                 }});                                // Create a line chart
+                 lineChart.MPChart('setData', data); // Set the chart's data
+           });
     </script>
   </body>
 </html>
