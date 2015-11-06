@@ -113,7 +113,7 @@
     };
     var pricing_to_payment = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, '$custom_event:56005', params);
     var pricing_to_badge = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, 'badge added', params);
-    var badge_signup = MP.api.segment('$signup', null, {{
+    var badge_signup = MP.api.segment('$signup', null, {
             from: moment().subtract(36, 'months'),
             to: moment(),
             type: 'unique',
