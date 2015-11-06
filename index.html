@@ -123,9 +123,9 @@
     $.when(pricing_to_payment, pricing_to_badge, badge_signup).done(
              function(pricing_to_payment, pricing_to_badge, badge_signup) { 
                 
-                payment_conversion = build_conversion(pricing_to_payment[1])
-                badge_conversion = build_conversion(pricing_to_badge[1])
-                console.log(badge_signup)
+                payment_conversion = build_conversion(pricing_to_payment[1]);
+                badge_conversion = build_conversion(pricing_to_badge[1]);
+                console.log(pricing_to_payment);
 
                  var data = {}
                  data["pricing page to payment"] = payment_conversion
