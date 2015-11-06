@@ -125,15 +125,16 @@
                 
                 payment_conversion = build_conversion(pricing_to_payment[1]);
                 badge_conversion = build_conversion(pricing_to_badge[1]);
-                console.log(badge_signup.values()["$signup"]);
-                var myFilter = function(val) {
-                 return val > 0;
-               };
-               console.log(badge_signup.values()["$signup"].filter(myFilter));
-
+                badge_signup_data = {}
+                for (date in badge_signup.values()["$signup"]){
+                  if (badge_signup.values()["$signup"][date] > 0){
+                    badge_signup_data[date] = badge_signup.values()["$signup"][date]
+                  }
+                }
                  var data = {}
-                 data["pricing page to payment"] = payment_conversion
-                 data["pricing page to badge added"] = badge_conversion
+                 data["badge signups"] = badge_signup_data;
+                 data["pricing page to payment"] = payment_conversion;
+                 data["pricing page to badge added"] = badge_conversion;
                  var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
                      tooltip: {
                          backgroundColor: '#fffce7'  // Make tooltip background yellow
