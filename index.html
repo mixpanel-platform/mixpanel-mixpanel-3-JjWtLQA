@@ -113,19 +113,26 @@
     };
     var pricing_to_payment = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, '$custom_event:56005', params);
     var pricing_to_badge = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, 'badge added', params);
-//     var badge_signup = MP.api.segment('$signup', null, {
-//             from: moment().subtract(36, 'months'),
-//             to: moment(),
-//             type: 'unique',
-//             interval: 90,
-//             where: '(string(properties["origin"]) == "partner")'
-//         }).done(function(badge_signup) { badge_signup_data = {}
-//                 for (date in badge_signup.values()["$signup"]){
-//                   if (badge_signup.values()["$signup"][date] > 0){
-//                     badge_signup_data[date] = badge_signup.values()["$signup"][date]
-//                   }
-//                 }
-// });
+    var badge_signup = MP.api.segment('$signup', null, {
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: '(string(properties["origin"]) == "partner")'
+        }).done(function(badge_signup) { badge_signup_data = {}
+                for (date in badge_signup.values()["$signup"]){
+                  if (badge_signup.values()["$signup"][date] > 0){
+                    badge_signup_data[date] = badge_signup.values()["$signup"][date]
+                  }
+                }
+                data["Badge Signups"] = badge_signup_data
+                var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
+                     tooltip: {
+                         backgroundColor: '#fffce7'  // Make tooltip background yellow
+                     }
+                 }});                                // Create a line chart
+                 lineChart.MPChart('setData', data); // Set the chart's data
+});
     $.when(pricing_to_payment, pricing_to_badge).done(
              function(pricing_to_payment, pricing_to_badge) { 
                 
