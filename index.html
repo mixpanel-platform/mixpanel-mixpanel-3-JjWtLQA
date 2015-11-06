@@ -125,6 +125,7 @@
                     badge_signup_data[date] = badge_signup.values()["$signup"][date]
                   }
                 }
+                data = {};
                 data["Badge Signups"] = badge_signup_data
                 var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
                      tooltip: {
