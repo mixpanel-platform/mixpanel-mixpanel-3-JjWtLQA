@@ -111,13 +111,21 @@
      interval:90,
      length:10,
     };
-    var pricing_to_payment = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, '$custom_event:56005', params)
-    var pricing_to_badge = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, 'badge added', params)
-    $.when(pricing_to_payment, pricing_to_badge).done(
-             function(pricing_to_payment, pricing_to_badge) { 
+    var pricing_to_payment = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, '$custom_event:56005', params);
+    var pricing_to_badge = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, 'badge added', params);
+    var badge_signup = MP.api.segment('$signup', null, {{
+            from: moment().subtract(36, 'months'),
+            to: moment(),
+            type: 'unique',
+            interval: 90,
+            where: '(string(properties["origin"]) == "partner")'
+        });
+    $.when(pricing_to_payment, pricing_to_badge, badge_signup).done(
+             function(pricing_to_payment, pricing_to_badge, badge_signup) { 
                 
                 payment_conversion = build_conversion(pricing_to_payment[1])
                 badge_conversion = build_conversion(pricing_to_badge[1])
+                console.log(badge_signup)
 
                  var data = {}
                  data["pricing page to payment"] = payment_conversion
