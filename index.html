@@ -113,26 +113,26 @@
     };
     var pricing_to_payment = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, '$custom_event:56005', params);
     var pricing_to_badge = MP.api.funnel({event:'View pricing page', selector:'boolean(properties["user_id"]) == true'}, 'badge added', params);
-    var badge_signup = MP.api.segment('$signup', null, {
-            from: moment().subtract(36, 'months'),
-            to: moment(),
-            type: 'unique',
-            interval: 90,
-            where: '(string(properties["origin"]) == "partner")'
-        });
+//     var badge_signup = MP.api.segment('$signup', null, {
+//             from: moment().subtract(36, 'months'),
+//             to: moment(),
+//             type: 'unique',
+//             interval: 90,
+//             where: '(string(properties["origin"]) == "partner")'
+//         }).done(function(badge_signup) { badge_signup_data = {}
+//                 for (date in badge_signup.values()["$signup"]){
+//                   if (badge_signup.values()["$signup"][date] > 0){
+//                     badge_signup_data[date] = badge_signup.values()["$signup"][date]
+//                   }
+//                 }
+// });
     $.when(pricing_to_payment, pricing_to_badge, badge_signup).done(
              function(pricing_to_payment, pricing_to_badge, badge_signup) { 
                 
                 payment_conversion = build_conversion(pricing_to_payment[1]);
                 badge_conversion = build_conversion(pricing_to_badge[1]);
-                badge_signup_data = {}
-                for (date in badge_signup.values()["$signup"]){
-                  if (badge_signup.values()["$signup"][date] > 0){
-                    badge_signup_data[date] = badge_signup.values()["$signup"][date]
-                  }
-                }
+
                  var data = {}
-                 data["badge signups"] = badge_signup_data;
                  data["pricing page to payment"] = payment_conversion;
                  data["pricing page to badge added"] = badge_conversion;
                  var lineChart = $('<div></div>').appendTo('body').MPChart({chartType: 'line', highchartsOptions: {
