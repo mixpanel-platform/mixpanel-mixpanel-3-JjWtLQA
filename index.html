@@ -126,8 +126,8 @@
 //                   }
 //                 }
 // });
-    $.when(pricing_to_payment, pricing_to_badge, badge_signup).done(
-             function(pricing_to_payment, pricing_to_badge, badge_signup) { 
+    $.when(pricing_to_payment, pricing_to_badge).done(
+             function(pricing_to_payment, pricing_to_badge) { 
                 
                 payment_conversion = build_conversion(pricing_to_payment[1]);
                 badge_conversion = build_conversion(pricing_to_badge[1]);
